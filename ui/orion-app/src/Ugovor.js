@@ -823,6 +823,8 @@ export class Ugovor extends Component {
           id="exampleModal"
           tabIndex="-1"
           aria-hidden="true"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
         >
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
@@ -857,6 +859,8 @@ export class Ugovor extends Component {
           id="exampleModal2"
           tabIndex="-1"
           aria-hidden="true"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
         >
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
