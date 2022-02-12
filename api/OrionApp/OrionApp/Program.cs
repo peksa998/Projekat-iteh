@@ -40,7 +40,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 var app = builder.Build();
 
 //Enable CORS
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+// app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 //Enable CORS
 app.UseCors(options => options
