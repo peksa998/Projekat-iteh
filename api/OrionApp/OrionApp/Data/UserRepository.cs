@@ -22,5 +22,10 @@ namespace OrionApp.Data
         {
             return context.Users.FirstOrDefault(x => x.Email == email);
         }
+
+        public User GetById(int id)
+        {
+            return context.Users.FirstOrDefault(x => x.Id == id);
+        }
     }
 }

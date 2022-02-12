@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrionApp.Data;
 using OrionApp.Dtos;
 using OrionApp.Models;
+using OrionApp.Helpers;
 
 namespace OrionApp.Controllers
 {
@@ -11,10 +12,12 @@ namespace OrionApp.Controllers
     public class AuthControler : Controller
     {
         private readonly IUserRepository repository;
+        private readonly JwtServices jwtService;
 
-        public AuthControler(IUserRepository repository)
+        public AuthControler(IUserRepository repository, JwtServices jwtService)
         {
             this.repository = repository;
+            this.jwtService = jwtService;
         }
 
         [HttpPost("register")]
@@ -47,8 +50,47 @@ namespace OrionApp.Controllers
                 return BadRequest(new { message = "Invalid Credentials" });
             }
 
-            return Ok(user);
+            var jwt = jwtService.generate(user.Id);
 
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
+            {
+                HttpOnly = true
+            });
+
+            return Ok(new {message ="success"
+            });
+
+        }
+
+        [HttpGet("user")]
+        public IActionResult User ()
+        {
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+
+                var token = jwtService.Verify(jwt);
+
+                int userId = int.Parse(token.Issuer);
+
+                var user = repository.GetById(userId);
+
+                return Ok(user);
+
+            } catch (Exception ex)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+
+            return Ok(new {
+                message = "success"
+            });
         }
     }
 }

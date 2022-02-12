@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using OrionApp.Data;
+using OrionApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 
 // Add services to the container.
+builder.Services.AddCors();
 builder.Services.AddDbContext<UserContext>(optionsAction);
 void optionsAction(DbContextOptionsBuilder obj)
 {
@@ -15,6 +17,7 @@ void optionsAction(DbContextOptionsBuilder obj)
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<JwtServices>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,12 +42,22 @@ var app = builder.Build();
 //Enable CORS
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+//Enable CORS
+app.UseCors(options => options
+    .WithOrigins(new[] { "http://localhost:3000" })
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseAuthorization();
 
