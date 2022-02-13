@@ -20,8 +20,12 @@ export const Login = (props) => {
     });
 
     const content = await response.json();
-    setRedirect(true);
-    props.setName(content.message);
+    if (content.message != "success") {
+      alert(content.message);
+    } else {
+      setRedirect(true);
+      props.setName(content.message);
+    }
 
     console.log(content);
   };
