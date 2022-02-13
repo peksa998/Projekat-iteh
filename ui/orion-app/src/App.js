@@ -12,17 +12,35 @@ import { Nav } from "./Nav";
 import { Register } from "./Register";
 
 function App() {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("http://localhost:5193/api/user", {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      const content = await response.json();
+
+      setName(content.Name);
+    })();
+  });
+
   return (
     // <Content />
 
     <>
       <div className="App">
         <BrowserRouter>
-          <Nav />
+          <Nav name={name} setName={setName} />
 
           <main className="form-signin">
-            <Route path="/" exact component={Content} />
-            <Route path="/login" component={Login} />
+            <Route path="/" exact component={() => <Content name={name} />} />
+            <Route
+              path="/login"
+              component={() => <Login setName={setName} />}
+            />
             <Route path="/register" component={Register} />
           </main>
         </BrowserRouter>

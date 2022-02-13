@@ -10,7 +10,7 @@ import CurrencyRow from "./CurrencyRow";
 const BASE_URL =
   "http://api.exchangeratesapi.io/v1/latest?access_key=8f288df2d2522afbcda642e64bba683b";
 
-export const Content = () => {
+export const Content = (props) => {
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [fromCurrency, setFromCurrency] = useState();
   const [toCurrency, setToCurrency] = useState();
@@ -59,6 +59,7 @@ export const Content = () => {
 
   return (
     <>
+      <h5>{props.name ? "Hi " + props.name : "You are not logged in!"}</h5>
       <BrowserRouter>
         <div className="App container">
           <h3 className="d-flex justify-content-center m-3">Orion app</h3>

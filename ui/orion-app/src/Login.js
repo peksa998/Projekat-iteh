@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
-export const Login = () => {
+export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -9,7 +9,7 @@ export const Login = () => {
   const submit = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:5193/api/login", {
+    const response = await fetch("http://localhost:5193/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -19,7 +19,11 @@ export const Login = () => {
       }),
     });
 
+    const content = await response.json();
     setRedirect(true);
+    props.setName(content.message);
+
+    console.log(content);
   };
 
   if (redirect) {
